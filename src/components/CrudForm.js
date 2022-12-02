@@ -1,18 +1,43 @@
 import React, { useState, useEffect } from "react";
 
-const CrudForm = () => {
-  const initialForm = {
+ const initialForm = {
     name: "",
     constellation: "",
     id: null,
   };
+
+const CrudForm = ({ createData, updateData, dataToEdit, setDataToEdit }) => {
+ 
   const [form, setForm] = useState(initialForm);
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    setForm({
+        ...form,
+        [e.target.name]: e.target.value,
+      });
+  };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleReset = (e) => {};
+    if (!form.name || !form.constellation) {
+      alert("Datos incompletos");
+      return;
+    }
+
+    if (form.id === null) {
+      createData(form);
+    } else {
+      updateData(form);
+    }
+
+    handleReset();
+  };
+
+  const handleReset = (e) => {
+    setForm(initialForm);
+    setDataToEdit(null);
+  };
 
   return (
     <div>
@@ -22,14 +47,14 @@ const CrudForm = () => {
           type="text"
           name="name"
           placeholder="Nombre"
-          onSubmit={handleChange}
+          onChange={handleChange}
           value={form.name}
         />
         <input
           type="text"
           name="constellation"
           placeholder="Constelación"
-          onSubmit={handleChange}
+          onChange={handleChange}
           value={form.constellation}
         />
         <input type="submit" value="Enviar" />
